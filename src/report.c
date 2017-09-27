@@ -1,27 +1,27 @@
 /*
 *********************************************************************
-                                                                   
-REPORT.C -- Reporting Routines for EPANET Program                
-                                                                    
-VERSION:    2.00                                               
+
+REPORT.C -- Reporting Routines for EPANET Program
+
+VERSION:    2.00
 DATE:       5/30/00
             6/24/02
             8/15/07  (2.00.11)
             2/14/08  (2.00.12)
 AUTHOR:     L. Rossman
             US EPA - NRMRL
-                                                                    
-This module contains various procedures (all beginning with       
-'write') that are called from other modules to write formatted    
+
+This module contains various procedures (all beginning with
+'write') that are called from other modules to write formatted
 output to a report file.
 
 It also contains function disconnected(), called from writehydwarn()
 and writehyderr(), that checks if a hydraulic solution causes a
-network to become disconnected. 
+network to become disconnected.
 
 The function writeline(S) is used throughout to write a
-formatted string S to the report file.                                          
-                                                                    
+formatted string S to the report file.
+
 ********************************************************************
 */
 
@@ -62,11 +62,11 @@ void      writelinktable(Pfloat *);
 int  writereport()
 /*
 **------------------------------------------------------
-**   Input:   none                                      
-**   Output:  returns error code                        
-**   Purpose: writes formatted output report to file    
-**                                                      
-**   Calls strcomp() from the EPANET.C module.                                            
+**   Input:   none
+**   Output:  returns error code
+**   Purpose: writes formatted output report to file
+**
+**   Calls strcomp() from the EPANET.C module.
 **------------------------------------------------------
 */
 {
@@ -117,7 +117,7 @@ int  writereport()
          /* Write full formatted report to file */
          else
          {
-            Rptflag = 1; 
+            Rptflag = 1;
             writecon(FMT17);
             writecon(Rpt2Fname);
             writelogo();
@@ -140,9 +140,9 @@ int  writereport()
 void  writelogo()
 /*
 **--------------------------------------------------------------
-**   Input:   none                                                
-**   Output:  none                                                
-**   Purpose: writes program logo to report file.                 
+**   Input:   none
+**   Output:  none
+**   Purpose: writes program logo to report file.
 **--------------------------------------------------------------
 */
 {
@@ -153,7 +153,7 @@ void  writelogo()
    char s[80];
    time_t timer;         /* time_t structure & functions time() & */
                          /* ctime() are defined in time.h         */
-   
+
    version = CODEVERSION;
    major=  version/10000;
    minor=  (version%10000)/100;
@@ -178,9 +178,9 @@ void  writelogo()
 void  writesummary()
 /*
 **--------------------------------------------------------------
-**   Input:   none                                                
-**   Output:  none                                                
-**   Purpose: writes summary system information to report file    
+**   Input:   none
+**   Output:  none
+**   Purpose: writes summary system information to report file
 **--------------------------------------------------------------
 */
 {
@@ -275,11 +275,11 @@ void  writesummary()
 void  writehydstat(int iter, double relerr)
 /*
 **--------------------------------------------------------------
-**   Input:   iter   = # iterations to find hydraulic solution        
-**            relerr = convergence error in hydraulic solution    
-**   Output:  none                                                
+**   Input:   iter   = # iterations to find hydraulic solution
+**            relerr = convergence error in hydraulic solution
+**   Output:  none
 **   Purpose: writes hydraulic status report for solution found
-**            at current time period to report file       
+**            at current time period to report file
 **--------------------------------------------------------------
 */
 {
@@ -346,9 +346,9 @@ void  writehydstat(int iter, double relerr)
 void  writeenergy()
 /*
 **-------------------------------------------------------------
-**   Input:   none                                               
-**   Output:  none                                               
-**   Purpose: writes energy usage report to report file          
+**   Input:   none
+**   Output:  none
+**   Purpose: writes energy usage report to report file
 **-------------------------------------------------------------
 */
 {
@@ -386,9 +386,9 @@ void  writeenergy()
 int  writeresults()
 /*
 **--------------------------------------------------------------
-**   Input:   none                                                
-**   Output:  returns error code                                  
-**   Purpose: writes simulation results to report file            
+**   Input:   none
+**   Output:  returns error code
+**   Purpose: writes simulation results to report file
 **--------------------------------------------------------------
 */
 {
@@ -398,11 +398,11 @@ int  writeresults()
 
    /*
    **-----------------------------------------------------------
-   **  NOTE:  The OutFile contains results for 4 node variables       
+   **  NOTE:  The OutFile contains results for 4 node variables
    **         (demand, head, pressure, & quality) and 8 link
    **         variables (flow, velocity, headloss, quality,
    **         status, setting, reaction rate & friction factor)
-   **         at each reporting time.                                         
+   **         at each reporting time.
    **-----------------------------------------------------------
    */
 
@@ -465,8 +465,8 @@ void  writenodetable(Pfloat *x)
 /*
 **---------------------------------------------------------------
 **   Input:   x = pointer to node results for current time
-**   Output:  none                                  
-**   Purpose: writes node results for current time to report file            
+**   Output:  none
+**   Purpose: writes node results for current time to report file
 **---------------------------------------------------------------
 */
 {
@@ -527,8 +527,8 @@ void  writelinktable(Pfloat *x)
 /*
 **---------------------------------------------------------------
 **   Input:   x = pointer to link results for current time
-**   Output:  none                                  
-**   Purpose: writes link results for current time to report file            
+**   Output:  none
+**   Purpose: writes link results for current time to report file
 **---------------------------------------------------------------
 */
 {
@@ -599,10 +599,10 @@ void  writelinktable(Pfloat *x)
 void  writeheader(int type, int contin)
 /*
 **--------------------------------------------------------------
-**   Input:   type   = table type                                
-**            contin = table continuation flag                    
-**   Output:  none                                                
-**   Purpose: writes column headings for output report tables             
+**   Input:   type   = table type
+**            contin = table continuation flag
+**   Output:  none
+**   Purpose: writes column headings for output report tables
 **--------------------------------------------------------------
 */
 {
@@ -713,9 +713,9 @@ void  writeheader(int type, int contin)
 void  writeline(char *s)
 /*
 **--------------------------------------------------------------
-**   Input:   *s = text string                                    
-**   Output:  none                                                
-**   Purpose: writes a line of output to report file              
+**   Input:   *s = text string
+**   Output:  none
+**   Purpose: writes a line of output to report file
 **--------------------------------------------------------------
 */
 {
@@ -738,10 +738,10 @@ void  writeline(char *s)
 void  writerelerr(int iter, double relerr)
 /*
 **-----------------------------------------------------------------
-**   Input:   iter   = current iteration of hydraulic solution    
-**            relerr = current convergence error                  
-**   Output:  none                                                
-**   Purpose: writes out convergence status of hydraulic solution 
+**   Input:   iter   = current iteration of hydraulic solution
+**            relerr = current convergence error
+**   Output:  none
+**   Purpose: writes out convergence status of hydraulic solution
 **-----------------------------------------------------------------
 */
 {
@@ -761,11 +761,11 @@ void  writerelerr(int iter, double relerr)
 void  writestatchange(int k, char s1, char s2)
 /*
 **--------------------------------------------------------------
-**   Input:   k  = link index                                     
-**            s1 = old link status                                
-**            s2 = new link status                                
-**   Output:  none                                                
-**   Purpose: writes change in link status to output report       
+**   Input:   k  = link index
+**            s1 = old link status
+**            s2 = new link status
+**   Output:  none
+**   Purpose: writes change in link status to output report
 **--------------------------------------------------------------
 */
 {
@@ -810,9 +810,9 @@ void  writestatchange(int k, char s1, char s2)
 void writecontrolaction(int k, int i)
 /*
 ----------------------------------------------------------------
-**   Input:   k  = link index                                     
-**            i  = control index                                
-**   Output:  none                                                
+**   Input:   k  = link index
+**            i  = control index
+**   Output:  none
 **   Purpose: writes control action taken to status report
 **--------------------------------------------------------------
 */
@@ -840,9 +840,9 @@ void writecontrolaction(int k, int i)
 void writeruleaction(int k, char *ruleID)
 /*
 **--------------------------------------------------------------
-**   Input:   k  = link index                                     
+**   Input:   k  = link index
 **            *ruleID  = rule ID
-**   Output:  none                                                
+**   Output:  none
 **   Purpose: writes rule action taken to status report
 **--------------------------------------------------------------
 */
@@ -856,8 +856,8 @@ void writeruleaction(int k, char *ruleID)
 int  writehydwarn(int iter, double relerr)
 /*
 **--------------------------------------------------------------
-**   Input:   iter = # iterations to find hydraulic solution      
-**   Output:  warning flag code                                                
+**   Input:   iter = # iterations to find hydraulic solution
+**   Output:  warning flag code
 **   Purpose: writes hydraulic warning message to report file
 **
 **   Note: Warning conditions checked in following order:
@@ -918,7 +918,7 @@ int  writehydwarn(int iter, double relerr)
           if (Q[j] < 0.0) s = XHEAD;                                           //(2.00.11 - LR)
       }                                                                        //(2.00.11 - LR)
       if (s == XHEAD || s == XFLOW)                                            //(2.00.11 - LR)
-      {                                    
+      {
          sprintf(Msg,WARN04,Link[j].ID,StatTxt[s],                             //(2.00.11 - LR)
                  clocktime(Atime,Htime));
          if (Messageflag) writeline(Msg);
@@ -949,10 +949,10 @@ int  writehydwarn(int iter, double relerr)
 void  writehyderr(int errnode)
 /*
 **-----------------------------------------------------------
-**   Input:   none                                          
-**   Output:  none                                          
-**   Purpose: outputs status & checks connectivity when     
-**            network hydraulic equations cannot be solved. 
+**   Input:   none
+**   Output:  none
+**   Purpose: outputs status & checks connectivity when
+**            network hydraulic equations cannot be solved.
 **-----------------------------------------------------------
 */
 {
@@ -966,10 +966,10 @@ void  writehyderr(int errnode)
 int  disconnected()
 /*
 **-------------------------------------------------------------------
-**   Input:   None                                                  
-**   Output:  Returns number of disconnected nodes                  
-**   Purpose: Tests current hydraulic solution to see if any closed 
-**            links have caused the network to become disconnected. 
+**   Input:   None
+**   Output:  Returns number of disconnected nodes
+**   Purpose: Tests current hydraulic solution to see if any closed
+**            links have caused the network to become disconnected.
 **-------------------------------------------------------------------
 */
 {
@@ -1048,10 +1048,10 @@ void  marknodes(int m, int *nodelist, char *marked)
 /*
 **----------------------------------------------------------------
 **   Input:   m = number of source nodes
-**            nodelist[] = list of nodes to be traced from          
-**            marked[]   = TRUE if node connected to source         
-**   Output:  None.                                                 
-**   Purpose: Marks all junction nodes connected to tanks.          
+**            nodelist[] = list of nodes to be traced from
+**            marked[]   = TRUE if node connected to source
+**   Output:  None.
+**   Purpose: Marks all junction nodes connected to tanks.
 **----------------------------------------------------------------
 */
 {
@@ -1097,10 +1097,10 @@ void  marknodes(int m, int *nodelist, char *marked)
 void getclosedlink(int i, char *marked)
 /*
 **----------------------------------------------------------------
-**   Input:   i = junction index                                    
-**            marked[] = marks nodes already examined               
-**   Output:  None.                                                 
-**   Purpose: Determines if a closed link connects to junction i.   
+**   Input:   i = junction index
+**            marked[] = marks nodes already examined
+**   Output:  None.
+**   Purpose: Determines if a closed link connects to junction i.
 **----------------------------------------------------------------
 */
 {
@@ -1121,15 +1121,15 @@ void getclosedlink(int i, char *marked)
       else getclosedlink(j,marked);
    }
 }
-      
+
 
 void  writelimits(int j1, int j2)
 /*
 **--------------------------------------------------------------
-**   Input:   j1 = index of first output variable                 
-**            j2 = index of last output variable                  
-**   Output:  none                                                
-**   Purpose: writes reporting criteria to output report          
+**   Input:   j1 = index of first output variable
+**            j2 = index of last output variable
+**   Output:  none
+**   Purpose: writes reporting criteria to output report
 **--------------------------------------------------------------
 */
 {
@@ -1150,16 +1150,16 @@ void  writelimits(int j1, int j2)
       }
    }
 }                        /* End of writelimits */
-   
+
 
 int  checklimits(double *y, int j1, int j2)
 /*
 **--------------------------------------------------------------
-**   Input:   *y = array of output results                        
-**            j1 = index of first output variable                 
-**            j2 = index of last output variable                  
-**   Output:  returns 1 if criteria met, 0 otherwise              
-**   Purpose: checks if output reporting criteria is met          
+**   Input:   *y = array of output results
+**            j1 = index of first output variable
+**            j2 = index of last output variable
+**   Output:  returns 1 if criteria met, 0 otherwise
+**   Purpose: checks if output reporting criteria is met
 **--------------------------------------------------------------
 */
 {
@@ -1176,9 +1176,9 @@ int  checklimits(double *y, int j1, int j2)
 void writetime(char *fmt)
 /*
 **----------------------------------------------------------------
-**   Input:   fmt = format string                             
-**   Output:  none                             
-**   Purpose: writes starting/ending time of a run to report file              
+**   Input:   fmt = format string
+**   Output:  none
+**   Purpose: writes starting/ending time of a run to report file
 **----------------------------------------------------------------
 */
 {
@@ -1192,10 +1192,10 @@ void writetime(char *fmt)
 char *clocktime(char *atime, long seconds)
 /*
 **--------------------------------------------------------------
-**   Input:   seconds = time in seconds                             
-**   Output:  atime = time in hrs:min                             
-**            (returns pointer to atime)                          
-**   Purpose: converts time in seconds to hours:minutes format              
+**   Input:   seconds = time in seconds
+**   Output:  atime = time in hrs:min
+**            (returns pointer to atime)
+**   Purpose: converts time in seconds to hours:minutes format
 **--------------------------------------------------------------
 */
 {
@@ -1213,7 +1213,7 @@ char *fillstr(char *s, char ch, int n)
 /*
 **---------------------------------------------------------
 **  Fills n bytes of s to character ch.
-**  NOTE: does not check for overwriting s. 
+**  NOTE: does not check for overwriting s.
 **---------------------------------------------------------
 */
 {
@@ -1228,7 +1228,7 @@ int  getnodetype(int i)
 /*
 **---------------------------------------------------------
 **  Determines type of node with index i
-**  (junction = 0, reservoir = 1, tank = 2). 
+**  (junction = 0, reservoir = 1, tank = 2).
 **---------------------------------------------------------
 */
 {

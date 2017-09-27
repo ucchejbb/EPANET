@@ -18,7 +18,7 @@ DATE:       5/30/00
 EPANET performs extended period hydraulic and water quality analysis of
 looped, pressurized piping networks. The program consists of the
 following code modules:
-  
+
     EPANET.C  -- main module providing supervisory control
     INPUT1.C  -- controls processing of input data
     INPUT2.C  -- reads data from input file
@@ -126,16 +126,18 @@ execute function x and set the error code equal to its return value.
 #endif
 #include <math.h>
 #include <float.h>                                                             //(2.00.12 - LR)
- 
+
 #include "text.h"
 #include "types.h"
 #include "enumstxt.h"
 #include "funcs.h"
 #define  EXTERN
 #include "vars.h"
-#include "epanet2.h"
+#include "../include/epanet2.h"
 
-void (* viewprog) (char *);     /* Pointer to progress viewing function */   
+//#define CLE
+
+void (* viewprog) (char *);     /* Pointer to progress viewing function */
 
 
 /*
@@ -156,12 +158,12 @@ void (* viewprog) (char *);     /* Pointer to progress viewing function */
 int DLLEXPORT ENepanet(char *f1, char *f2, char *f3, void (*pviewprog) (char *))
 
 /*------------------------------------------------------------------------
-**   Input:   f1 = pointer to name of input file              
-**            f2 = pointer to name of report file             
-**            f3 = pointer to name of binary output file      
-**            pviewprog = see note below                 
-**   Output:  none  
-**  Returns: error code                              
+**   Input:   f1 = pointer to name of input file
+**            f2 = pointer to name of report file
+**            f3 = pointer to name of binary output file
+**            pviewprog = see note below
+**   Output:  none
+**  Returns: error code
 **  Purpose: runs a complete EPANET simulation
 **
 **  The pviewprog() argument is a pointer to a callback function
@@ -186,11 +188,11 @@ int DLLEXPORT ENepanet(char *f1, char *f2, char *f3, void (*pviewprog) (char *))
 
 int DLLEXPORT ENopen(char *f1, char *f2, char *f3)
 /*----------------------------------------------------------------
-**  Input:   f1 = pointer to name of input file              
-**           f2 = pointer to name of report file             
-**           f3 = pointer to name of binary output file      
-**  Output:  none 
-**  Returns: error code                              
+**  Input:   f1 = pointer to name of input file
+**           f2 = pointer to name of report file
+**           f3 = pointer to name of binary output file
+**  Output:  none
+**  Returns: error code
 **  Purpose: opens EPANET input file & reads in network data
 **----------------------------------------------------------------
 */
@@ -200,7 +202,7 @@ int DLLEXPORT ENopen(char *f1, char *f2, char *f3)
 /*** Updated 9/7/00 ***/
 /* Reset math coprocessor */
 #ifdef DLL
-   _fpreset();              
+   _fpreset();
 #endif
 
 /* Set system flags */
@@ -211,7 +213,7 @@ int DLLEXPORT ENopen(char *f1, char *f2, char *f3)
    SaveQflag = FALSE;
    Warnflag  = FALSE;
    Coordflag = TRUE;
-   
+
 /*** Updated 9/7/00 ***/
    Messageflag = TRUE;
    Rptflag = 1;
@@ -242,7 +244,7 @@ int DLLEXPORT ENopen(char *f1, char *f2, char *f3)
    freeTmplist(Curvelist);
 
 /* If using previously saved hydraulics then open its file */
-   if (Hydflag == USE) ERRCODE(openhydfile());          
+   if (Hydflag == USE) ERRCODE(openhydfile());
 
 /* Write input summary to report file */
    if (!errcode)
@@ -259,9 +261,9 @@ int DLLEXPORT ENopen(char *f1, char *f2, char *f3)
 int DLLEXPORT ENsaveinpfile(char *filename)
 /*----------------------------------------------------------------
 **  Input:   filename = name of INP file
-**  Output:  none 
-**  Returns: error code                              
-**  Purpose: saves current data base to file                        
+**  Output:  none
+**  Returns: error code
+**  Purpose: saves current data base to file
 **----------------------------------------------------------------
 */
 {
@@ -272,10 +274,10 @@ int DLLEXPORT ENsaveinpfile(char *filename)
 
 int DLLEXPORT ENclose()
 /*----------------------------------------------------------------
-**  Input:   none                    
-**  Output:  none 
+**  Input:   none
+**  Output:  none
 **  Returns: error code
-**  Purpose: frees all memory & files used by EPANET                 
+**  Purpose: frees all memory & files used by EPANET
 **----------------------------------------------------------------
 */
 {
@@ -293,7 +295,7 @@ int DLLEXPORT ENclose()
    if (RptFile != NULL && RptFile != stdout) { fclose(RptFile); RptFile=NULL; }
    if (HydFile != NULL) { fclose(HydFile); HydFile=NULL; }
    if (OutFile != NULL) { fclose(OutFile); OutFile=NULL; }
-  
+
    if (Hydflag == SCRATCH) remove(HydFname);                                   //(2.00.12 - LR)
    if (Outflag == SCRATCH) remove(OutFname);                                   //(2.00.12 - LR)
 
@@ -315,10 +317,10 @@ int DLLEXPORT ENclose()
 
 int DLLEXPORT ENsolveH()
 /*----------------------------------------------------------------
-**  Input:   none                    
-**  Output:  none 
-**  Returns: error code                              
-**  Purpose: solves for network hydraulics in all time periods                          
+**  Input:   none
+**  Output:  none
+**  Returns: error code
+**  Purpose: solves for network hydraulics in all time periods
 **----------------------------------------------------------------
 */
 {
@@ -341,9 +343,9 @@ int DLLEXPORT ENsolveH()
 
 /*** Updated 6/24/02 ***/
          sprintf(Msg,"%-10s",clocktime(Atime,Htime));
-
          writecon(Msg);
-         sprintf(Msg,FMT101,Atime);
+
+         sprintf(Msg,FMT101,Atime); //FMT101
          writewin(Msg);
 
       /* Solve for hydraulics & advance to next time period */
@@ -352,7 +354,8 @@ int DLLEXPORT ENsolveH()
          ERRCODE(ENnextH(&tstep));
 
 /*** Updated 6/24/02 ***/
-         writecon("\b\b\b\b\b\b\b\b\b\b");
+
+         writecon("\b\b\b\b\b\b\b\b");//\b\b");
       }
       while (tstep > 0);
    }
@@ -370,13 +373,13 @@ int DLLEXPORT ENsolveH()
 
 int DLLEXPORT ENsaveH()
 /*----------------------------------------------------------------
-**  Input:   none                   
-**  Output:  none 
-**  Returns: error code                              
+**  Input:   none
+**  Output:  none
+**  Returns: error code
 **  Purpose: saves hydraulic results to binary file.
 **
 **  Must be called before ENreport() if no WQ simulation made.
-**  Should not be called if ENsolveQ() will be used.                  
+**  Should not be called if ENsolveQ() will be used.
 **----------------------------------------------------------------
 */
 {
@@ -404,10 +407,10 @@ int DLLEXPORT ENsaveH()
 
 int DLLEXPORT ENopenH()
 /*----------------------------------------------------------------
-**  Input:   none                   
-**  Output:  none 
-**  Returns: error code                              
-**  Purpose: sets up data structures for hydraulic analysis          
+**  Input:   none
+**  Output:  none
+**  Returns: error code
+**  Purpose: sets up data structures for hydraulic analysis
 **----------------------------------------------------------------
 */
 {
@@ -436,9 +439,9 @@ int DLLEXPORT ENinitH(int flag)
 **                  if link flows should be re-initialized (1) or
 **                  not (0) and 2nd digit indicates if hydraulic
 **                  results should be saved to file (1) or not (0)
-**  Output:  none 
+**  Output:  none
 **  Returns: error code
-**  Purpose: initializes hydraulic analysis          
+**  Purpose: initializes hydraulic analysis
 **----------------------------------------------------------------
 */
 {
@@ -596,9 +599,9 @@ int DLLEXPORT ENsolveQ()
          ERRCODE(ENnextQ(&tstep));
 
 /*** Updated 6/24/02 ***/
-         writecon("\b\b\b\b\b\b\b\b\b\b");
+         writecon("\b\b\b\b\b\b\b\b");//\b\b");
 
-      }  while (tstep > 0); 
+      }  while (tstep > 0);
 
    }
 
@@ -606,7 +609,7 @@ int DLLEXPORT ENsolveQ()
 
 /*** Updated 6/24/02 ***/
    writecon("\b\b\b\b\b\b\b\b                     ");
-   ENcloseQ();    
+   ENcloseQ();
    return(errcode);
 }
 
@@ -761,7 +764,7 @@ int DLLEXPORT ENgetversion(int *v)
 {
     *v = CODEVERSION;
     return(0);
-} 
+}
 
 
 int DLLEXPORT ENgetcontrol(int cindex, int *ctype, int *lindex, EN_API_FLOAT_TYPE *setting, int *nindex, EN_API_FLOAT_TYPE *level)
@@ -800,7 +803,7 @@ int DLLEXPORT ENgetcontrol(int cindex, int *ctype, int *lindex, EN_API_FLOAT_TYP
    *setting = (EN_API_FLOAT_TYPE)s;
    *level = (EN_API_FLOAT_TYPE)lvl;
    return(0);
-}         
+}
 
 
 int DLLEXPORT ENgetcount(int code, int *count)
@@ -860,7 +863,7 @@ int DLLEXPORT ENgettimeparam(int code, long *value)
       case EN_REPORTSTEP:   *value = Rstep;     break;
       case EN_REPORTSTART:  *value = Rstart;    break;
       case EN_STATISTIC:    *value = Tstatflag; break;
-      case EN_RULESTEP:     *value = Rulestep;  break; 
+      case EN_RULESTEP:     *value = Rulestep;  break;
       case EN_PERIODS:      *value = Nperiods;  break;
       case EN_STARTTIME:    *value = Tstart;    break;  /* Added TNT 10/2/2009 */
       case EN_HTIME:        *value = Htime;     break;
@@ -1080,10 +1083,10 @@ int DLLEXPORT ENgetcoord(int index, EN_API_FLOAT_TYPE *x, EN_API_FLOAT_TYPE *y)
    if (!Openflag) return(102);
    if (index < 1 || index > Nnodes) return(203);
    if (!Coordflag) return(255);
-   
+
    // check if node have coords
    if (Coord[index].HaveCoords == FALSE) return(254);
-   
+
    *x = Coord[index].X;
    *y = Coord[index].Y;
    return 0;
@@ -1095,7 +1098,7 @@ int DLLEXPORT ENsetcoord(int index, EN_API_FLOAT_TYPE x, EN_API_FLOAT_TYPE y)
    if (!Openflag) return(102);
    if (index < 1 || index > Nnodes) return(203);
    if (!Coordflag) return(255);
-   
+
    Coord[index].X = x;
    Coord[index].Y = y;
    Coord[index].HaveCoords = TRUE;
@@ -1140,7 +1143,7 @@ int DLLEXPORT ENgetnodevalue(int index, int code, EN_API_FLOAT_TYPE *value)
          }
          else v = (double)(Tank[index-Njuncs].Pat);
          break;
-         
+
       case EN_EMITTER:
          v = 0.0;
          if (Node[index].Ke > 0.0)
@@ -1186,7 +1189,7 @@ int DLLEXPORT ENgetnodevalue(int index, int code, EN_API_FLOAT_TYPE *value)
          v = 0.0;                                                              //(2.00.11 - LR)
          if ( index > Njuncs ) v = Tank[index-Njuncs].V1max*Ucf[VOLUME];       //(2.00.11 - LR)
          break;                                                                //(2.00.11 - LR)
-         
+
       case EN_DEMAND:
          v = NodeDemand[index]*Ucf[FLOW];
          break;
@@ -1219,17 +1222,17 @@ int DLLEXPORT ENgetnodevalue(int index, int code, EN_API_FLOAT_TYPE *value)
          v = 0.0;
          if ( index > Njuncs ) v = Tank[index-Njuncs].Vmin * Ucf[VOLUME];
          break;
-       
+
      case EN_MAXVOLUME: // !sph
        v = 0.0;
        if ( index > Njuncs ) v = Tank[index-Njuncs].Vmax * Ucf[VOLUME];
        break;
-       
+
       case EN_VOLCURVE:
          v = 0.0;
          if ( index > Njuncs ) v = Tank[index-Njuncs].Vcurve;
          break;
-        
+
       case EN_MINLEVEL:
          v = 0.0;
          if ( index > Njuncs )
@@ -1237,7 +1240,7 @@ int DLLEXPORT ENgetnodevalue(int index, int code, EN_API_FLOAT_TYPE *value)
             v = (Tank[index-Njuncs].Hmin - Node[index].El) * Ucf[ELEV];
          }
          break;
- 
+
       case EN_MAXLEVEL:
          v = 0.0;
          if ( index > Njuncs )
@@ -1278,7 +1281,7 @@ int DLLEXPORT ENgetnodevalue(int index, int code, EN_API_FLOAT_TYPE *value)
    Functions for retrieving link data
 ----------------------------------------------------------------
 */
-   
+
 
 int DLLEXPORT ENgetlinkindex(char *id, int *index)
 {
@@ -1368,7 +1371,7 @@ int DLLEXPORT ENgetlinkvalue(int index, int code, EN_API_FLOAT_TYPE *value)
          break;
 
       case EN_INITSETTING:
-         if (Link[index].Type == PIPE || Link[index].Type == CV) 
+         if (Link[index].Type == PIPE || Link[index].Type == CV)
             return(ENgetlinkvalue(index, EN_ROUGHNESS, value));
          v = Link[index].Kc;
          switch (Link[index].Type)
@@ -1377,7 +1380,7 @@ int DLLEXPORT ENgetlinkvalue(int index, int code, EN_API_FLOAT_TYPE *value)
             case PSV:
             case PBV: v *= Ucf[PRESSURE]; break;
             case FCV: v *= Ucf[FLOW];
-         }            
+         }
          break;
 
       case EN_KBULK:
@@ -1443,13 +1446,13 @@ int DLLEXPORT ENgetlinkvalue(int index, int code, EN_API_FLOAT_TYPE *value)
             case PSV:
             case PBV: v *= Ucf[PRESSURE]; break;
             case FCV: v *= Ucf[FLOW];
-         }            
+         }
          break;
 
       case EN_ENERGY:
          getenergy(index, &v, &a);
          break;
-         
+
       case EN_LINKQUAL:
          v = avgqual(index) * Ucf[LINKQUAL];
          break;
@@ -1458,7 +1461,7 @@ int DLLEXPORT ENgetlinkvalue(int index, int code, EN_API_FLOAT_TYPE *value)
          if (Link[index].Type == PUMP)
             v = (double)Pump[PUMPINDEX(index)].Upat;
          break;
-         
+
       default: return(251);
    }
    *value = (EN_API_FLOAT_TYPE)v;
@@ -1471,36 +1474,36 @@ int  DLLEXPORT ENgetcurve(int curveIndex, char *id, int *nValues, EN_API_FLOAT_T
   int iPoint, nPoints;
   Scurve curve;
   EN_API_FLOAT_TYPE *pointX, *pointY;
-  
+
 /* Check that input file opened */
    if (!Openflag) return(102);
-  
+
   curve = Curve[curveIndex];
   nPoints = curve.Npts;
-  
+
   pointX = calloc(nPoints, sizeof(EN_API_FLOAT_TYPE));
   pointY = calloc(nPoints, sizeof(EN_API_FLOAT_TYPE));
-  
+
   for (iPoint = 0; iPoint < nPoints; iPoint++) {
     double x = curve.X[iPoint] * Ucf[LENGTH];
     double y = curve.Y[iPoint] * Ucf[VOLUME];
     pointX[iPoint] = (EN_API_FLOAT_TYPE)x;
     pointY[iPoint] = (EN_API_FLOAT_TYPE)y;
   }
-  
+
   strncpy(id,"", MAXID);
   strncpy(id, curve.ID, MAXID);
   *nValues = nPoints;
   *xValues = pointX;
   *yValues = pointY;
-  
+
   return(0);
 }
 
 
 /*
 ----------------------------------------------------------------
-   Functions for changing network data 
+   Functions for changing network data
 ----------------------------------------------------------------
 */
 
@@ -1557,7 +1560,7 @@ int DLLEXPORT ENsetcontrol(int cindex, int ctype, int lindex,
 
       case PIPE:
       case PUMP: status = OPEN;
-                 if (s == 0.0) status = CLOSED;               
+                 if (s == 0.0) status = CLOSED;
    }
    if (ctype == LOWLEVEL || ctype == HILEVEL)
    {
@@ -1576,17 +1579,17 @@ int DLLEXPORT ENsetcontrol(int cindex, int ctype, int lindex,
    Control[cindex].Grade = lvl;
    Control[cindex].Time = t;
    return(0);
-}         
+}
 
-    
+
 int DLLEXPORT ENsetnodevalue(int index, int code, EN_API_FLOAT_TYPE v)
 /*----------------------------------------------------------------
 **  Input:   index = node index
 **           code  = node parameter code (see EPANET2.H)
 **           value = parameter value
 **  Output:  none
-**  Returns: error code                              
-**  Purpose: sets input parameter value for a node 
+**  Returns: error code
+**  Purpose: sets input parameter value for a node
 **----------------------------------------------------------------
 */
 {
@@ -1646,7 +1649,7 @@ int DLLEXPORT ENsetnodevalue(int index, int code, EN_API_FLOAT_TYPE v)
             value = pow((Ucf[FLOW]/value),Qexp)/Ucf[PRESSURE];
          Node[index].Ke = value;
          break;
-         
+
       case EN_INITQUAL:
          if (value < 0.0) return(202);
          Node[index].C0 = value/Ucf[QUALITY];
@@ -1745,7 +1748,7 @@ int DLLEXPORT ENsetnodevalue(int index, int code, EN_API_FLOAT_TYPE v)
             return(251);
          }
          break;
-        
+
       case EN_MINLEVEL:
          if (value < 0.0) return(202);
          if (index <= Njuncs) return(251); //not a tank or reservoir
@@ -1834,8 +1837,8 @@ int DLLEXPORT ENsetlinkvalue(int index, int code, EN_API_FLOAT_TYPE v)
 **           code  = link parameter code (see EPANET2.H)
 **           v = parameter value
 **  Output:  none
-**  Returns: error code                              
-**  Purpose: sets input parameter value for a link 
+**  Returns: error code
+**  Purpose: sets input parameter value for a link
 **----------------------------------------------------------------
 */
 {
@@ -1853,7 +1856,7 @@ int DLLEXPORT ENsetlinkvalue(int index, int code, EN_API_FLOAT_TYPE v)
             value /= Ucf[DIAM];              /* Convert to feet */
             r = Link[index].Diam/value;      /* Ratio of old to new diam */
             Link[index].Km *= SQR(r)*SQR(r); /* Adjust minor loss factor */
-            Link[index].Diam = value;        /* Update diameter */       
+            Link[index].Diam = value;        /* Update diameter */
             resistance(index);               /* Update resistance factor */
          }
          break;
@@ -1900,7 +1903,7 @@ int DLLEXPORT ENsetlinkvalue(int index, int code, EN_API_FLOAT_TYPE v)
       case EN_INITSETTING:
       case EN_SETTING:
          if (value < 0.0) return(202);
-         if (Link[index].Type == PIPE || Link[index].Type == CV) 
+         if (Link[index].Type == PIPE || Link[index].Type == CV)
            return(ENsetlinkvalue(index, EN_ROUGHNESS, v));
          else
          {
@@ -1981,7 +1984,7 @@ int  DLLEXPORT  ENaddpattern(char *id)
 
 /* Add the new pattern to the new array of patterns */
 
-    strcpy(tmpPat[n].ID, id); 
+    strcpy(tmpPat[n].ID, id);
     tmpPat[n].Length = 1;
     tmpPat[n].F = (double *) calloc(tmpPat[n].Length, sizeof(double));
     if (tmpPat[n].F == NULL) err = 1;
@@ -2006,7 +2009,7 @@ int  DLLEXPORT  ENaddpattern(char *id)
     return 0;
 }
 
-   
+
 int  DLLEXPORT  ENsetpattern(int index, EN_API_FLOAT_TYPE *f, int n)
 {
    int j;
@@ -2076,7 +2079,7 @@ int  DLLEXPORT  ENaddcurve(char *id)
 
 /* Add the new Curve to the new array of curves */
 
-    strcpy(tmpCur[n].ID, id); 
+    strcpy(tmpCur[n].ID, id);
     tmpCur[n].Npts = 1;
     tmpCur[n].X = (double *) calloc(tmpCur[n].Npts, sizeof(double));
     tmpCur[n].Y = (double *) calloc(tmpCur[n].Npts, sizeof(double));
@@ -2157,7 +2160,7 @@ int  DLLEXPORT  ENsettimeparam(int code, long value)
 
 {
    if (!Openflag) return(102);
-  if (OpenHflag || OpenQflag) { 
+  if (OpenHflag || OpenQflag) {
     // --> there's nothing wrong with changing certain time parameters during a simulation run, or before the run has started.
     // todo -- how to tell?
     /*
@@ -2176,7 +2179,7 @@ int  DLLEXPORT  ENsettimeparam(int code, long value)
       Dur = value;
       if (Rstart > Dur) Rstart = 0;
       break;
-      
+
     case EN_HYDSTEP:
       if (value == 0) return(202);
       Hstep = value;
@@ -2184,53 +2187,53 @@ int  DLLEXPORT  ENsettimeparam(int code, long value)
       Hstep = MIN(Rstep, Hstep);
       Qstep = MIN(Qstep, Hstep);
       break;
-      
+
     case EN_QUALSTEP:
       if (value == 0) return(202);
       Qstep = value;
       Qstep = MIN(Qstep, Hstep);
       break;
-      
+
     case EN_PATTERNSTEP:
       if (value == 0) return(202);
       Pstep = value;
       if (Hstep > Pstep) Hstep = Pstep;
       break;
-      
+
     case EN_PATTERNSTART:
       Pstart = value;
       break;
-      
+
     case EN_REPORTSTEP:
       if (value == 0) return(202);
       Rstep = value;
       if (Hstep > Rstep) Hstep = Rstep;
       break;
-      
+
     case EN_REPORTSTART:
       if (Rstart > Dur) return(202);
       Rstart = value;
       break;
-      
+
     case EN_RULESTEP:
       if (value == 0) return(202);
       Rulestep = value;
       Rulestep = MIN(Rulestep, Hstep);
       break;
-      
+
     case EN_STATISTIC:
       if (value > RANGE) return(202);
       Tstatflag = (char)value;
       break;
-      
+
     case EN_HTIME:
       Htime = value;
       break;
-      
+
     case EN_QTIME:
       Qtime = value;
       break;
-      
+
     default:
       return(251);
    }
@@ -2280,7 +2283,7 @@ int  DLLEXPORT ENsetoption(int code, EN_API_FLOAT_TYPE v)
    }
    return(0);
 }
- 
+
 
 int  DLLEXPORT ENsetstatusreport(int code)
 {
@@ -2357,19 +2360,19 @@ int DLLEXPORT ENgetpumptype(int index, int *type)
 
 /*
 ----------------------------------------------------------------
-   Functions for opening files 
+   Functions for opening files
 ----------------------------------------------------------------
 */
 
 
 int   openfiles(char *f1, char *f2, char *f3)
 /*----------------------------------------------------------------
-**  Input:   f1 = pointer to name of input file                  
-**           f2 = pointer to name of report file                 
-**           f3 = pointer to name of binary output file          
+**  Input:   f1 = pointer to name of input file
+**           f2 = pointer to name of report file
+**           f3 = pointer to name of binary output file
 **  Output:  none
-**  Returns: error code                                  
-**  Purpose: opens input & report files                          
+**  Returns: error code
+**  Purpose: opens input & report files
 **----------------------------------------------------------------
 */
 {
@@ -2431,7 +2434,7 @@ int  openhydfile()
       if (Hydflag == SCRATCH) return(0);
       fclose(HydFile);
    }
-      
+
 /* Use Hydflag to determine the type of hydraulics file to use. */
 /* Write error message if the file cannot be opened.            */
    HydFile = NULL;
@@ -2553,7 +2556,7 @@ int  openoutfile()
 
 /*
 ----------------------------------------------------------------
-   Global memory management functions 
+   Global memory management functions
 ----------------------------------------------------------------
 */
 
@@ -2655,7 +2658,7 @@ int  allocdata()
       ERRCODE(MEMCHECK(Q));
       ERRCODE(MEMCHECK(LinkSetting));
       ERRCODE(MEMCHECK(LinkStatus));
-   } 
+   }
 
 /* Allocate memory for tanks, sources, pumps, valves,   */
 /* controls, demands, time patterns, & operating curves */
@@ -2695,7 +2698,7 @@ int  allocdata()
          Curve[n].X = NULL;
          Curve[n].Y = NULL;
       }
-     
+
      for (n=0; n<=MaxNodes; n++)
      {
        // node demand
@@ -2708,7 +2711,7 @@ int  allocdata()
           Coord[n].HaveCoords = FALSE;
        }
      }
-     
+
    }
 
 /* Allocate memory for rule base (see RULES.C) */
@@ -2760,7 +2763,7 @@ void  freedata()
 /*----------------------------------------------------------------
 **  Input:   none
 **  Output:  none
-**  Purpose: frees memory allocated for network data structures.        
+**  Purpose: frees memory allocated for network data structures.
 **----------------------------------------------------------------
 */
 {
@@ -2820,7 +2823,7 @@ void  freedata()
        }
        free(Curve);
     }
-    
+
 /* Free memory for node coordinates */
    if (Coordflag == TRUE) free(Coord);
 
@@ -2835,7 +2838,7 @@ void  freedata()
 
 /*
 ----------------------------------------------------------------
-   General purpose functions 
+   General purpose functions
 ----------------------------------------------------------------
 */
 
@@ -2978,7 +2981,7 @@ char *geterrmsg(int errcode)
       case 4:     strcpy(Msg,WARN4);   break;
       case 5:     strcpy(Msg,WARN5);   break;
       case 6:     strcpy(Msg,WARN6);   break;
-*/      
+*/
                                        /* System Errors */
       case 101:   strcpy(Msg,ERR101);  break;
       case 102:   strcpy(Msg,ERR102);  break;
@@ -3010,7 +3013,7 @@ char *geterrmsg(int errcode)
       case 253:  sprintf(Msg,ERR253);  break;
       case 254:  sprintf(Msg,ERR254);  break;
       case 255:  sprintf(Msg,ERR255);  break;
-      
+
                                        /* File Errors */
       case 301:  strcpy(Msg,ERR301);   break;
       case 302:  strcpy(Msg,ERR302);   break;
@@ -3041,7 +3044,7 @@ void  errmsg(int errcode)
    {                      /* Do not write msg to file.  */
       writecon("\n  ");
       writecon(geterrmsg(errcode));
-   }      
+   }
    else if (RptFile != NULL && Messageflag)
    {
       writeline(geterrmsg(errcode));
@@ -3051,25 +3054,25 @@ void  errmsg(int errcode)
 
 void  writecon(char *s)
 /*----------------------------------------------------------------
-**  Input:   text string                                         
-**  Output:  none                                                
-**  Purpose: writes string of characters to console              
+**  Input:   text string
+**  Output:  none
+**  Purpose: writes string of characters to console
 **----------------------------------------------------------------
 */
 {
-                                                    //(2.00.11 - LR)
-   //fprintf(stdout,s);
-   //fflush(stdout);
-
+#ifdef CLE                                                    //(2.00.11 - LR)
+  fprintf(stdout,s);
+  fflush(stdout);
+#endif // CLE
 }
 
 
 void writewin(char *s)
 /*----------------------------------------------------------------
-**  Input:   text string                                         
-**  Output:  none                                                
+**  Input:   text string
+**  Output:  none
 **  Purpose: passes character string to viewprog() in
-**           application which calls the EPANET DLL 
+**           application which calls the EPANET DLL
 **----------------------------------------------------------------
 */
 {

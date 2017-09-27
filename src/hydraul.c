@@ -1,8 +1,8 @@
 /*
 *********************************************************************
-                                                                   
-HYDRAUL.C --  Hydraulic Simulator for EPANET Program         
-                                                                   
+
+HYDRAUL.C --  Hydraulic Simulator for EPANET Program
+
 VERSION:    2.00
 DATE:       6/5/00
             9/7/00
@@ -15,12 +15,12 @@ DATE:       6/5/00
             2/14/08    (2.00.12)
 AUTHOR:     L. Rossman
             US EPA - NRMRL
-                                                                   
-  This module contains the network hydraulic simulator.            
-  It simulates the network's hydraulic behavior over an            
-  an extended period of time and writes its results to the         
+
+  This module contains the network hydraulic simulator.
+  It simulates the network's hydraulic behavior over an
+  an extended period of time and writes its results to the
   binary file HydFile.
-                                             
+
   The entry points for this module are:
      openhyd()    -- called from ENopenH() in EPANET.C
      inithyd()    -- called from ENinitH() in EPANET.C
@@ -90,9 +90,9 @@ void valvecoeff(int k);                                                        /
 int  openhyd()
 /*
  *--------------------------------------------------------------
- *  Input:   none     
- *  Output:  returns error code                                          
- *  Purpose: opens hydraulics solver system 
+ *  Input:   none
+ *  Output:  returns error code
+ *  Purpose: opens hydraulics solver system
  *--------------------------------------------------------------
 */
 {
@@ -112,8 +112,8 @@ void inithyd(int initflag)
 **--------------------------------------------------------------
 **  Input:   initflag > 0 if link flows should be re-initialized
 **                    = 0 if not
-**  Output:  none                                          
-**  Purpose: initializes hydraulics solver system 
+**  Output:  none
+**  Purpose: initializes hydraulics solver system
 **--------------------------------------------------------------
 */
 {
@@ -181,10 +181,10 @@ void inithyd(int initflag)
 int   runhyd(long *t)
 /*
 **--------------------------------------------------------------
-**  Input:   none     
+**  Input:   none
 **  Output:  t = pointer to current time (in seconds)
-**  Returns: error code                                          
-**  Purpose: solves network hydraulics in a single time period 
+**  Returns: error code
+**  Purpose: solves network hydraulics in a single time period
 **--------------------------------------------------------------
 */
 {
@@ -207,7 +207,7 @@ int   runhyd(long *t)
      /* solution info */
      _relativeError = relerr;
      _iterations = iter;
-     
+
 /*** Updated 3/1/01 ***/
       /* If system unbalanced and no extra trials */
       /* allowed, then activate the Haltflag.     */
@@ -223,11 +223,11 @@ int   runhyd(long *t)
 int  nexthyd(long *tstep)
 /*
 **--------------------------------------------------------------
-**  Input:   none     
+**  Input:   none
 **  Output:  tstep = pointer to time step (in seconds)
-**  Returns: error code                                          
+**  Returns: error code
 **  Purpose: finds length of next time step & updates tank
-**           levels and rule-based contol actions 
+**           levels and rule-based contol actions
 **--------------------------------------------------------------
 */
 {
@@ -266,14 +266,14 @@ int  nexthyd(long *tstep)
    *tstep = hydstep;
    return(errcode);
 }
-  
+
 
 void  closehyd()
 /*
 **--------------------------------------------------------------
-**  Input:   none     
-**  Output:  returns error code                                          
-**  Purpose: closes hydraulics solver system 
+**  Input:   none
+**  Output:  returns error code
+**  Purpose: closes hydraulics solver system
 **--------------------------------------------------------------
 */
 {
@@ -285,9 +285,9 @@ void  closehyd()
 int  allocmatrix()
 /*
 **--------------------------------------------------------------
-**  Input:   none                                                
-**  Output:  returns error code                                  
-**  Purpose: allocates memory used for solution matrix coeffs.   
+**  Input:   none
+**  Output:  returns error code
+**  Purpose: allocates memory used for solution matrix coeffs.
 **--------------------------------------------------------------
 */
 {
@@ -315,9 +315,9 @@ int  allocmatrix()
 void  freematrix()
 /*
 **--------------------------------------------------------------
-**  Input:   none                                                
-**  Output:  none                                                
-**  Purpose: frees memory used for solution matrix coeffs.       
+**  Input:   none
+**  Output:  none
+**  Purpose: frees memory used for solution matrix coeffs.
 **--------------------------------------------------------------
 */
 {
@@ -338,7 +338,7 @@ void  initlinkflow(int i, char s, double k)
 **  Input:   i = link index
 **           s = link status
 **           k = link setting (i.e., pump speed)
-**  Output:  none                                                      
+**  Output:  none
 **  Purpose: sets initial flow in link to QZERO if link is closed,
 **           to design flow for a pump, or to flow at velocity of
 **           1 fps for other links.
@@ -357,8 +357,8 @@ void  setlinkflow(int k, double dh)
 **--------------------------------------------------------------
 **  Input:   k = link index
 **           dh = headloss across link
-**  Output:  none   
-**  Purpose: sets flow in link based on current headloss                                              
+**  Output:  none
+**  Purpose: sets flow in link based on current headloss
 **--------------------------------------------------------------
 */
 {
@@ -429,7 +429,7 @@ void  setlinkstatus(int index, char value, char *s, double *k)
 **           s      = pointer to link status
 **           k      = pointer to link setting
 **  Output:  none
-**  Purpose: sets link status to OPEN or CLOSED 
+**  Purpose: sets link status to OPEN or CLOSED
 **----------------------------------------------------------------
 */
 {
@@ -448,7 +448,7 @@ void  setlinkstatus(int index, char value, char *s, double *k)
       *s = OPEN;
    }
 
-   /* Status set to closed */ 
+   /* Status set to closed */
    else if (value == 0)
    {
       /* Adjust link setting for pumps & valves */
@@ -457,7 +457,7 @@ void  setlinkstatus(int index, char value, char *s, double *k)
 /*** Updated 9/7/00 ***/
       if (Link[index].Type >  PUMP
       &&  Link[index].Type != GPV) *k = MISSING;
-      
+
       /* Reset link flow if it was originally open */
 //      if (*s > CLOSED) initlinkflow(index, CLOSED, *k);
       *s = CLOSED;
@@ -512,15 +512,15 @@ void  setlinksetting(int index, double value, char *s, double *k)
       }
       *k = value;
    }
-} 
+}
 
 
 void  resistance(int k)
 /*
 **--------------------------------------------------------------------
-**  Input:   k = link index                                                      
-**  Output:  none                                                      
-**  Purpose: computes link flow resistance      
+**  Input:   k = link index
+**  Output:  none
+**  Purpose: computes link flow resistance
 **--------------------------------------------------------------------
 */
 {
@@ -534,7 +534,7 @@ void  resistance(int k)
    /* Friction factor for D-W formula gets included during solution */
    /* process in pipecoeff() function.                              */
        case CV:
-       case PIPE: 
+       case PIPE:
          e = Link[k].Kc;                 /* Roughness coeff. */
          d = Link[k].Diam;               /* Diameter */
          L = Link[k].Len;                /* Length */
@@ -575,9 +575,9 @@ void  resistance(int k)
 void  demands()
 /*
 **--------------------------------------------------------------------
-**  Input:   none                                                      
-**  Output:  none                                                      
-**  Purpose: computes demands at nodes during current time period      
+**  Input:   none
+**  Output:  none
+**  Purpose: computes demands at nodes during current time period
 **--------------------------------------------------------------------
 */
 {
@@ -630,7 +630,7 @@ void  demands()
       j = Pump[n].Upat;
       if (j > 0)
       {
-         i = Pump[n].Link;           
+         i = Pump[n].Link;
          k = p % (long) Pattern[j].Length;
          setlinksetting(i, Pattern[j].F[k], &LinkStatus[i], &LinkSetting[i]);
       }
@@ -641,9 +641,9 @@ void  demands()
 int  controls()
 /*
 **---------------------------------------------------------------------
-**  Input:   none                                                   
-**  Output:  number of links whose setting changes                  
-**  Purpose: implements simple controls based on time or tank levels  
+**  Input:   none
+**  Output:  number of links whose setting changes
+**  Purpose: implements simple controls based on time or tank levels
 **---------------------------------------------------------------------
 */
 {
@@ -703,7 +703,7 @@ int  controls()
  //           if (s1 != s2) initlinkflow(k, S[k], K[k]);
             setsum++;
          }
-      }   
+      }
    }
    return(setsum);
 }                        /* End of controls */
@@ -712,9 +712,9 @@ int  controls()
 long  timestep(void)
 /*
 **----------------------------------------------------------------
-**  Input:   none                                                
-**  Output:  returns time step until next change in hydraulics   
-**  Purpose: computes time step to advance hydraulic simulation  
+**  Input:   none
+**  Output:  returns time step until next change in hydraulics
+**  Purpose: computes time step to advance hydraulic simulation
 **----------------------------------------------------------------
 */
 {
@@ -748,14 +748,14 @@ long  timestep(void)
 void  tanktimestep(long *tstep)
 /*
 **-----------------------------------------------------------------
-**  Input:   *tstep = current time step                                                
-**  Output:  *tstep = modified current time step   
+**  Input:   *tstep = current time step
+**  Output:  *tstep = modified current time step
 **  Purpose: revises time step based on shortest time to fill or
-**           drain a tank  
+**           drain a tank
 **-----------------------------------------------------------------
 */
 {
-   int    i,n;   
+   int    i,n;
    double  h,q,v;
    long   t;
 
@@ -785,10 +785,10 @@ void  tanktimestep(long *tstep)
 void  controltimestep(long *tstep)
 /*
 **------------------------------------------------------------------
-**  Input:   *tstep = current time step                                                
-**  Output:  *tstep = modified current time step   
+**  Input:   *tstep = current time step
+**  Output:  *tstep = modified current time step
 **  Purpose: revises time step based on shortest time to activate
-**           a simple control  
+**           a simple control
 **------------------------------------------------------------------
 */
 {
@@ -820,7 +820,7 @@ void  controltimestep(long *tstep)
       }
 
       if (Control[i].Type == TIMER)             /* Time control:        */
-      {              
+      {
          if (Control[i].Time > Htime)
              t = Control[i].Time - Htime;
       }
@@ -850,10 +850,10 @@ void  controltimestep(long *tstep)
 void  ruletimestep(long *tstep)
 /*
 **--------------------------------------------------------------
-**  Input:   *tstep = current time step (sec)                            
-**  Output:  *tstep = modified time step                                               
+**  Input:   *tstep = current time step (sec)
+**  Output:  *tstep = modified time step
 **  Purpose: updates next time step by checking if any rules
-**           will fire before then; also updates tank levels.                               
+**           will fire before then; also updates tank levels.
 **--------------------------------------------------------------
 */
 {
@@ -912,14 +912,14 @@ void  ruletimestep(long *tstep)
    *tstep = Htime - tnow;
    Htime = tnow;
 }
-   
+
 
 void  addenergy(long hstep)
 /*
 **-------------------------------------------------------------
-**  Input:   hstep = time step (sec)                            
-**  Output:  none                                               
-**  Purpose: accumulates pump energy usage                               
+**  Input:   hstep = time step (sec)
+**  Output:  none
+**  Purpose: accumulates pump energy usage
 **-------------------------------------------------------------
 */
 {
@@ -963,8 +963,8 @@ void  addenergy(long hstep)
 
       if ( (i = Pump[j].Epat) > 0)
       {
-          m = n % (long)Pattern[i].Length; 
-          c *= Pattern[i].F[m]; 
+          m = n % (long)Pattern[i].Length;
+          c *= Pattern[i].F[m];
       }
       else c *= f0;
 
@@ -989,10 +989,10 @@ void  addenergy(long hstep)
 void  getenergy(int k, double *kw, double *eff)
 /*
 **----------------------------------------------------------------
-**  Input:   k    = link index                         
+**  Input:   k    = link index
 **  Output:  *kw  = kwatt energy used
 **           *eff = efficiency (pumps only)
-**  Purpose: computes flow energy associated with link k                                           
+**  Purpose: computes flow energy associated with link k
 **----------------------------------------------------------------
 */
 {
@@ -1035,10 +1035,10 @@ void  getenergy(int k, double *kw, double *eff)
 void  tanklevels(long tstep)
 /*
 **----------------------------------------------------------------
-**  Input:   tstep = current time step                         
-**  Output:  none                                                
-**  Purpose: computes new water levels in tanks after current    
-**           time step                                           
+**  Input:   tstep = current time step
+**  Output:  none
+**  Purpose: computes new water levels in tanks after current
+**           time step
 **----------------------------------------------------------------
 */
 {
@@ -1072,10 +1072,10 @@ void  tanklevels(long tstep)
 double  tankvolume(int i, double h)
 /*
 **--------------------------------------------------------------------
-**  Input:   i = tank index                                         
-**           h = water elevation in tank                                
-**  Output:  returns water volume in tank                           
-**  Purpose: finds water volume in tank i corresponding to elev. h. 
+**  Input:   i = tank index
+**           h = water elevation in tank
+**  Output:  returns water volume in tank
+**  Purpose: finds water volume in tank i corresponding to elev. h.
 **--------------------------------------------------------------------
 */
 {
@@ -1096,10 +1096,10 @@ double  tankvolume(int i, double h)
 double  tankgrade(int i, double v)
 /*
 **-------------------------------------------------------------------
-**  Input:   i = tank index                                         
-**           v = volume in tank                                     
-**  Output:  returns water level in tank                            
-**  Purpose: finds water level in tank i corresponding to volume v. 
+**  Input:   i = tank index
+**           v = volume in tank
+**  Output:  returns water level in tank
+**  Purpose: finds water level in tank i corresponding to volume v.
 **-------------------------------------------------------------------
 */
 {
@@ -1112,7 +1112,7 @@ double  tankgrade(int i, double v)
    /* If curve exists, interpolate on volume (originally the Y-variable */
    /* but used here as the X-variable) to find new level above bottom.  */
    /* Remember that volume curve is stored in original units.           */
-   else return(Node[Tank[i].Node].El + 
+   else return(Node[Tank[i].Node].El +
       interp(Curve[j].Npts, Curve[j].Y, Curve[j].X, v*Ucf[VOLUME])/Ucf[HEAD]);
 
 }                        /* End of tankgrade */
@@ -1121,16 +1121,16 @@ double  tankgrade(int i, double v)
 int  netsolve(int *iter, double *relerr)
 /*
 **-------------------------------------------------------------------
-**  Input:   none                                                
-**  Output:  *iter   = # of iterations to reach solution         
-**           *relerr = convergence error in solution             
-**           returns error code                                  
-**  Purpose: solves network nodal equations for heads and flows    
-**           using Todini's Gradient algorithm                   
+**  Input:   none
+**  Output:  *iter   = # of iterations to reach solution
+**           *relerr = convergence error in solution
+**           returns error code
+**  Purpose: solves network nodal equations for heads and flows
+**           using Todini's Gradient algorithm
 **
-*** Updated 9/7/00 *** 
+*** Updated 9/7/00 ***
 *** Updated 2.00.11 ***
-*** Updated 2.00.12 ***                                                            
+*** Updated 2.00.12 ***
 **  Notes:   Status checks on CVs, pumps and pipes to tanks are made
 **           every CheckFreq iteration, up until MaxCheck iterations
 **           are reached. Status checks on control valves are made
@@ -1142,8 +1142,8 @@ int  netsolve(int *iter, double *relerr)
 **           not achieved in MaxIter trials and ExtraIter > 0 then
 **           another ExtraIter trials are made with no status changes
 **           made to any links and a warning message is generated.
-**                                                             
-**   This procedure calls linsolve() which appears in SMATRIX.C. 
+**
+**   This procedure calls linsolve() which appears in SMATRIX.C.
 **-------------------------------------------------------------------
 */
 {
@@ -1155,10 +1155,10 @@ int  netsolve(int *iter, double *relerr)
    int    valveChange;           /* Valve status change flag */
    int    statChange;
 
-   /* Initialize status checking & relaxation factor */   
+   /* Initialize status checking & relaxation factor */
    nextcheck = CheckFreq;
    RelaxFactor = 1.0;
-  
+
    /* Repeat iterations until convergence or trial limit is exceeded. */
    /* (ExtraIter used to increase trials in case of status cycling.)  */
    if (Statflag == FULL) writerelerr(0,0);
@@ -1168,8 +1168,8 @@ int  netsolve(int *iter, double *relerr)
    while (*iter <= maxtrials)
    {
       /*
-      ** Compute coefficient matrices A & F and solve A*H = F 
-      ** where H = heads, A = Jacobian coeffs. derived from 
+      ** Compute coefficient matrices A & F and solve A*H = F
+      ** where H = heads, A = Jacobian coeffs. derived from
       ** head loss gradients, & F = flow correction terms.
       ** Solution for H is returned in F from call to linsolve().
       */
@@ -1252,9 +1252,9 @@ int  netsolve(int *iter, double *relerr)
 int  badvalve(int n)
 /*
 **-----------------------------------------------------------------
-**  Input:   n = node index                                                
+**  Input:   n = node index
 **  Output:  returns 1 if node n belongs to an active control valve,
-**           0 otherwise  
+**           0 otherwise
 **  Purpose: determines if a node belongs to an active control valve
 **           whose setting causes an inconsistent set of eqns. If so,
 **           the valve status is fixed open and a warning condition
@@ -1276,7 +1276,7 @@ int  badvalve(int n)
          {
             if (LinkStatus[k] == ACTIVE)
             {
-               if (Statflag == FULL) 
+               if (Statflag == FULL)
                {
                   sprintf(Msg,FMT61,clocktime(Atime,Htime),Link[k].ID);
                   writeline(Msg);
@@ -1291,14 +1291,14 @@ int  badvalve(int n)
    }
    return(0);
 }
-   
+
 
 int  valvestatus()
 /*
 **-----------------------------------------------------------------
-**  Input:   none                                                
+**  Input:   none
 **  Output:  returns 1 if any pressure or flow control valve                   //(2.00.11 - LR)
-**           changes status, 0 otherwise                                       //(2.00.11 - LR) 
+**           changes status, 0 otherwise                                       //(2.00.11 - LR)
 **  Purpose: updates status for PRVs & PSVs whose status                       //(2.00.12 - LR)
 **           is not fixed to OPEN/CLOSED
 **-----------------------------------------------------------------
@@ -1356,10 +1356,10 @@ int  valvestatus()
 int  linkstatus()
 /*
 **--------------------------------------------------------------
-**  Input:   none                                                
-**  Output:  returns 1 if any link changes status, 0 otherwise   
+**  Input:   none
+**  Output:  returns 1 if any link changes status, 0 otherwise
 **  Purpose: determines new status for pumps, CVs, FCVs & pipes                //(2.00.12 - LR)
-**           to tanks.                                              
+**           to tanks.
 **--------------------------------------------------------------
 */
 {
@@ -1413,8 +1413,8 @@ char  cvstatus(char s, double dh, double q)
 **  Input:   s  = current status
 **           dh = headloss
 **           q  = flow
-**  Output:  returns new link status                 
-**  Purpose: updates status of a check valve.        
+**  Output:  returns new link status
+**  Purpose: updates status of a check valve.
 **--------------------------------------------------
 */
 {
@@ -1436,10 +1436,10 @@ char  cvstatus(char s, double dh, double q)
 char  pumpstatus(int k, double dh)
 /*
 **--------------------------------------------------
-**  Input:   k  = link index                         
+**  Input:   k  = link index
 **           dh = head gain
-**  Output:  returns new pump status                 
-**  Purpose: updates status of an open pump.               
+**  Output:  returns new pump status
+**  Purpose: updates status of an open pump.
 **--------------------------------------------------
 */
 {
@@ -1462,13 +1462,13 @@ char  pumpstatus(int k, double dh)
 char  prvstatus(int k, char s, double hset, double h1, double h2)
 /*
 **-----------------------------------------------------------
-**  Input:   k    = link index                                
-**           s    = current status                            
-**           hset = valve head setting                        
-**           h1   = head at upstream node                     
-**           h2   = head at downstream node                   
-**  Output:  returns new valve status                         
-**  Purpose: updates status of a pressure reducing valve.     
+**  Input:   k    = link index
+**           s    = current status
+**           hset = valve head setting
+**           h1   = head at upstream node
+**           h2   = head at downstream node
+**  Output:  returns new valve status
+**  Purpose: updates status of a pressure reducing valve.
 **-----------------------------------------------------------
 */
 {
@@ -1512,13 +1512,13 @@ char  prvstatus(int k, char s, double hset, double h1, double h2)
 char  psvstatus(int k, char s, double hset, double h1, double h2)
 /*
 **-----------------------------------------------------------
-**  Input:   k    = link index                                
-**           s    = current status                            
-**           hset = valve head setting                        
-**           h1   = head at upstream node                     
-**           h2   = head at downstream node                   
-**  Output:  returns new valve status                         
-**  Purpose: updates status of a pressure sustaining valve.   
+**  Input:   k    = link index
+**           s    = current status
+**           hset = valve head setting
+**           h1   = head at upstream node
+**           h2   = head at downstream node
+**  Output:  returns new valve status
+**  Purpose: updates status of a pressure sustaining valve.
 **-----------------------------------------------------------
 */
 {
@@ -1562,19 +1562,19 @@ char  psvstatus(int k, char s, double hset, double h1, double h2)
 char  fcvstatus(int k, char s, double h1, double h2)
 /*
 **-----------------------------------------------------------
-**  Input:   k    = link index                                
-**           s    = current status                            
-**           h1   = head at upstream node                     
-**           h2   = head at downstream node                   
-**  Output:  returns new valve status                         
-**  Purpose: updates status of a flow control valve.          
-**                                                          
-**    Valve status changes to XFCV if flow reversal.       
-**    If current status is XFCV and current flow is        
-**    above setting, then valve becomes active.             
-**    If current status is XFCV, and current flow          
-**    positive but still below valve setting, then          
-**    status remains same.                                  
+**  Input:   k    = link index
+**           s    = current status
+**           h1   = head at upstream node
+**           h2   = head at downstream node
+**  Output:  returns new valve status
+**  Purpose: updates status of a flow control valve.
+**
+**    Valve status changes to XFCV if flow reversal.
+**    If current status is XFCV and current flow is
+**    above setting, then valve becomes active.
+**    If current status is XFCV, and current flow
+**    positive but still below valve setting, then
+**    status remains same.
 **-----------------------------------------------------------
 */
 {
@@ -1598,11 +1598,11 @@ char  fcvstatus(int k, char s, double h1, double h2)
 void  tankstatus(int k, int n1, int n2)
 /*
 **----------------------------------------------------------------
-**  Input:   k  = link index                                     
+**  Input:   k  = link index
 **           n1 = start node of link
-**           n2 = end node of link                              
-**  Output:  none                                                
-**  Purpose: closes link flowing into full or out of empty tank  
+**           n2 = end node of link
+**  Output:  none
+**  Purpose: closes link flowing into full or out of empty tank
 **----------------------------------------------------------------
 */
 {
@@ -1661,10 +1661,10 @@ void  tankstatus(int k, int n1, int n2)
 int  pswitch()
 /*
 **--------------------------------------------------------------
-**  Input:   none                                                
-**  Output:  returns 1 if status of any link changes, 0 if not   
-**  Purpose: adjusts settings of links controlled by junction    
-**           pressures after a hydraulic solution is found       
+**  Input:   none
+**  Output:  returns 1 if status of any link changes, 0 if not
+**  Purpose: adjusts settings of links controlled by junction
+**           pressures after a hydraulic solution is found
 **--------------------------------------------------------------
 */
 {
@@ -1734,9 +1734,9 @@ int  pswitch()
 double newflows()
 /*
 **----------------------------------------------------------------
-**  Input:   none                                                
-**  Output:  returns solution convergence error                  
-**  Purpose: updates link flows after new nodal heads computed   
+**  Input:   none
+**  Output:  returns solution convergence error
+**  Purpose: updates link flows after new nodal heads computed
 **----------------------------------------------------------------
 */
 {
@@ -1758,11 +1758,11 @@ double newflows()
    {
 
       /*
-      ** Apply flow update formula:                   
-      **   dq = Y - P*(new head loss)                 
-      **    P = 1/(dh/dq)                             
-      **    Y = P*(head loss based on current flow)   
-      ** where P & Y were computed in newcoeffs().   
+      ** Apply flow update formula:
+      **   dq = Y - P*(new head loss)
+      **    P = 1/(dh/dq)
+      **    Y = P*(head loss based on current flow)
+      ** where P & Y were computed in newcoeffs().
       */
 
       n1 = Link[k].N1;
@@ -1814,9 +1814,9 @@ double newflows()
 void   newcoeffs()
 /*
 **--------------------------------------------------------------
-**  Input:   none                                                
-**  Output:  none                                                
-**  Purpose: computes coefficients of linearized network eqns.   
+**  Input:   none
+**  Output:  none
+**  Purpose: computes coefficients of linearized network eqns.
 **--------------------------------------------------------------
 */
 {
@@ -1836,9 +1836,9 @@ void   newcoeffs()
 void  linkcoeffs()
 /*
 **--------------------------------------------------------------
-**   Input:   none                                                
-**   Output:  none                                                
-**   Purpose: computes solution matrix coefficients for links     
+**   Input:   none
+**   Output:  none
+**   Purpose: computes solution matrix coefficients for links
 **--------------------------------------------------------------
 */
 {
@@ -1863,15 +1863,15 @@ void  linkcoeffs()
          case PBV:   pbvcoeff(k);  break;
          case TCV:   tcvcoeff(k);  break;
          case GPV:   gpvcoeff(k);  break;
-         case FCV:   
+         case FCV:
          case PRV:
          case PSV:   /* If valve status fixed then treat as pipe */
                      /* otherwise ignore the valve for now. */
                      if (LinkSetting[k] == MISSING) valvecoeff(k);  //pipecoeff(k);      //(2.00.11 - LR)
                      else continue;
                      break;
-         default:    continue;                  
-      }                                         
+         default:    continue;
+      }
 
       /* Update net nodal inflows (X), solution matrix (A) and RHS array (F) */
       /* (Use covention that flow out of node is (-), flow into node is (+)) */
@@ -1897,10 +1897,10 @@ void  linkcoeffs()
 void  nodecoeffs()
 /*
 **----------------------------------------------------------------
-**  Input:   none                                                
-**  Output:  none                                                
-**  Purpose: completes calculation of nodal flow imbalance (X)   
-**           & flow correction (F) arrays                        
+**  Input:   none
+**  Output:  none
+**  Purpose: completes calculation of nodal flow imbalance (X)
+**           & flow correction (F) arrays
 **----------------------------------------------------------------
 */
 {
@@ -1919,10 +1919,10 @@ void  nodecoeffs()
 void  valvecoeffs()
 /*
 **--------------------------------------------------------------
-**   Input:   none                                                
-**   Output:  none                                                
-**   Purpose: computes matrix coeffs. for PRVs, PSVs & FCVs       
-**            whose status is not fixed to OPEN/CLOSED            
+**   Input:   none
+**   Output:  none
+**   Purpose: computes matrix coeffs. for PRVs, PSVs & FCVs
+**            whose status is not fixed to OPEN/CLOSED
 **--------------------------------------------------------------
 */
 {
@@ -1933,7 +1933,7 @@ void  valvecoeffs()
       k = Valve[i].Link;                        /* Link index of valve  */
       if (LinkSetting[k] == MISSING) continue;            /* Valve status fixed   */
       n1 = Link[k].N1;                          /* Start & end nodes    */
-      n2 = Link[k].N2; 
+      n2 = Link[k].N2;
       switch (Link[k].Type)                     /* Call valve-specific  */
       {                                         /*   function           */
          case PRV:  prvcoeff(k,n1,n2); break;
@@ -1948,8 +1948,8 @@ void  valvecoeffs()
 void  emittercoeffs()
 /*
 **--------------------------------------------------------------
-**   Input:   none                                                
-**   Output:  none                                                
+**   Input:   none
+**   Output:  none
 **   Purpose: computes matrix coeffs. for emitters
 **
 **   Note: Emitters consist of a fictitious pipe connected to
@@ -1976,7 +1976,7 @@ void  emittercoeffs()
       else p = 1.0/p;
       y = SGN(q)*z*p;
       Aii[Row[i]] += p;
-      F[Row[i]] += y + p*Node[i].El; 
+      F[Row[i]] += y + p*Node[i].El;
       X[i] -= q;
    }
 }
@@ -1986,7 +1986,7 @@ double  emitflowchange(int i)
 /*
 **--------------------------------------------------------------
 **   Input:   i = node index
-**   Output:  returns change in flow at an emitter node                                                
+**   Output:  returns change in flow at an emitter node
 **   Purpose: computes flow change at an emitter node
 **--------------------------------------------------------------
 */
@@ -2005,12 +2005,12 @@ double  emitflowchange(int i)
 void  pipecoeff(int k)
 /*
 **--------------------------------------------------------------
-**   Input:   k = link index                                      
-**   Output:  none                                                
-**  Purpose:  computes P & Y coefficients for pipe k              
-**                                                              
-**    P = inverse head loss gradient = 1/(dh/dQ)                
-**    Y = flow correction term = h*P                            
+**   Input:   k = link index
+**   Output:  none
+**  Purpose:  computes P & Y coefficients for pipe k
+**
+**    P = inverse head loss gradient = 1/(dh/dQ)
+**    Y = flow correction term = h*P
 **--------------------------------------------------------------
 */
 {
@@ -2037,9 +2037,9 @@ void  pipecoeff(int k)
    ml = Link[k].Km;                       /* Minor loss coeff.   */
    r = Link[k].R;                         /* Resistance coeff.   */
    f = 1.0;                               /* D-W friction factor */
-   if (Formflag == DW) f = DWcoeff(k,&dfdq);   
+   if (Formflag == DW) f = DWcoeff(k,&dfdq);
    r1 = f*r+ml;
- 
+
    /* Use large P coefficient for small flow resistance product */
    if (r1*q < RQtol)
    {
@@ -2078,12 +2078,12 @@ void  pipecoeff(int k)
 double DWcoeff(int k, double *dfdq)
 /*
 **--------------------------------------------------------------
-**   Input:   k = link index                                      
-**   Output:  returns Darcy-Weisbach friction factor              
-**   Purpose: computes Darcy-Weisbach friction factor             
-**                                                              
-**    Uses interpolating polynomials developed by               
-**    E. Dunlop for transition flow from 2000 < Re < 4000.      
+**   Input:   k = link index
+**   Output:  returns Darcy-Weisbach friction factor
+**   Purpose: computes Darcy-Weisbach friction factor
+**
+**    Uses interpolating polynomials developed by
+**    E. Dunlop for transition flow from 2000 < Re < 4000.
 **
 **   df/dq term is ignored as it slows convergence rate.
 **--------------------------------------------------------------
@@ -2142,9 +2142,9 @@ double DWcoeff(int k, double *dfdq)
 void  pumpcoeff(int k)
 /*
 **--------------------------------------------------------------
-**   Input:   k = link index                                      
-**   Output:  none                                                
-**   Purpose: computes P & Y coeffs. for pump in link k           
+**   Input:   k = link index
+**   Output:  none
+**   Purpose: computes P & Y coeffs. for pump in link k
 **--------------------------------------------------------------
 */
 {
@@ -2155,7 +2155,7 @@ void  pumpcoeff(int k)
          n;         /* Flow exponent coeff.   */
 
    double setting = LinkSetting[k];
-  
+
    /* Use high resistance pipe if pump closed or cannot deliver head */
    if (LinkStatus[k] <= CLOSED || setting == 0.0)
    {
@@ -2199,12 +2199,12 @@ void  pumpcoeff(int k)
 void  curvecoeff(int i, double q, double *h0, double *r)
 /*
 **-------------------------------------------------------------------
-**   Input:   i   = curve index                                        
+**   Input:   i   = curve index
 **            q   = flow rate
-**   Output:  *h0  = head at zero flow (y-intercept)                   
-**            *r  = dHead/dFlow (slope)                                
-**   Purpose: computes intercept and slope of head v. flow curve       
-**            at current flow.                                         
+**   Output:  *h0  = head at zero flow (y-intercept)
+**            *r  = dHead/dFlow (slope)
+**   Purpose: computes intercept and slope of head v. flow curve
+**            at current flow.
 **-------------------------------------------------------------------
 */
 {
@@ -2238,8 +2238,8 @@ void  gpvcoeff(int k)
 /*
 **--------------------------------------------------------------
 **   Input:   k = link index
-**   Output:  none                                                
-**   Purpose: computes P & Y coeffs. for general purpose valve   
+**   Output:  none
+**   Purpose: computes P & Y coeffs. for general purpose valve
 **--------------------------------------------------------------
 */
 {
@@ -2269,14 +2269,14 @@ void  gpvcoeff(int k)
       Y[k] = P[k]*(h0 + r*q)*SGN(Q[k]);                                        //(2.00.11 - LR)
    }
 }
- 
+
 
 void  pbvcoeff(int k)
 /*
 **--------------------------------------------------------------
-**   Input:   k = link index                                      
-**   Output:  none                                                
-**   Purpose: computes P & Y coeffs. for pressure breaker valve   
+**   Input:   k = link index
+**   Output:  none
+**   Purpose: computes P & Y coeffs. for pressure breaker valve
 **--------------------------------------------------------------
 */
 {
@@ -2302,9 +2302,9 @@ void  pbvcoeff(int k)
 void  tcvcoeff(int k)
 /*
 **--------------------------------------------------------------
-**   Input:   k = link index                                      
-**   Output:  none                                                
-**   Purpose: computes P & Y coeffs. for throttle control valve   
+**   Input:   k = link index
+**   Output:  none
+**   Purpose: computes P & Y coeffs. for throttle control valve
 **--------------------------------------------------------------
 */
 {
@@ -2328,12 +2328,12 @@ void  tcvcoeff(int k)
 void  prvcoeff(int k, int n1, int n2)
 /*
 **--------------------------------------------------------------
-**   Input:   k    = link index                                   
-**            n1   = upstream node of valve                       
-**            n2   = downstream node of valve                       
-**   Output:  none                                                
-**   Purpose: computes solution matrix coeffs. for pressure       
-**            reducing valves                                     
+**   Input:   k    = link index
+**            n1   = upstream node of valve
+**            n2   = downstream node of valve
+**   Output:  none
+**   Purpose: computes solution matrix coeffs. for pressure
+**            reducing valves
 **--------------------------------------------------------------
 */
 {
@@ -2346,9 +2346,9 @@ void  prvcoeff(int k, int n1, int n2)
    if (LinkStatus[k] == ACTIVE)
    {
       /*
-         Set coeffs. to force head at downstream 
-         node equal to valve setting & force flow (when updated in       
-         newflows()) equal to flow imbalance at downstream node. 
+         Set coeffs. to force head at downstream
+         node equal to valve setting & force flow (when updated in
+         newflows()) equal to flow imbalance at downstream node.
       */
       P[k] = 0.0;
       Y[k] = Q[k] + X[n2];       /* Force flow balance   */
@@ -2358,7 +2358,7 @@ void  prvcoeff(int k, int n1, int n2)
       return;
    }
 
-   /* 
+   /*
       For OPEN, CLOSED, or XPRESSURE valve
       compute matrix coeffs. using the valvecoeff() function.                  //(2.00.11 - LR)
    */
@@ -2374,12 +2374,12 @@ void  prvcoeff(int k, int n1, int n2)
 void  psvcoeff(int k, int n1, int n2)
 /*
 **--------------------------------------------------------------
-**   Input:   k    = link index                                   
-**            n1   = upstream node of valve                       
-**            n2   = downstream node of valve                       
-**   Output:  none                                                
-**   Purpose: computes solution matrix coeffs. for pressure       
-**            sustaining valve                                    
+**   Input:   k    = link index
+**            n1   = upstream node of valve
+**            n2   = downstream node of valve
+**   Output:  none
+**   Purpose: computes solution matrix coeffs. for pressure
+**            sustaining valve
 **--------------------------------------------------------------
 */
 {
@@ -2392,9 +2392,9 @@ void  psvcoeff(int k, int n1, int n2)
    if (LinkStatus[k] == ACTIVE)
    {
       /*
-         Set coeffs. to force head at upstream 
-         node equal to valve setting & force flow (when updated in       
-         newflows()) equal to flow imbalance at upstream node. 
+         Set coeffs. to force head at upstream
+         node equal to valve setting & force flow (when updated in
+         newflows()) equal to flow imbalance at upstream node.
       */
       P[k] = 0.0;
       Y[k] = Q[k] - X[n1];              /* Force flow balance   */
@@ -2404,7 +2404,7 @@ void  psvcoeff(int k, int n1, int n2)
       return;
    }
 
-   /* 
+   /*
       For OPEN, CLOSED, or XPRESSURE valve
       compute matrix coeffs. using the valvecoeff() function.                  //(2.00.11 - LR)
    */
@@ -2420,12 +2420,12 @@ void  psvcoeff(int k, int n1, int n2)
 void  fcvcoeff(int k, int n1, int n2)
 /*
 **--------------------------------------------------------------
-**   Input:   k    = link index                                   
-**            n1   = upstream node of valve                       
-**            n2   = downstream node of valve                       
-**   Output:  none                                                
-**   Purpose: computes solution matrix coeffs. for flow control   
-**            valve                                               
+**   Input:   k    = link index
+**            n1   = upstream node of valve
+**            n2   = downstream node of valve
+**   Output:  none
+**   Purpose: computes solution matrix coeffs. for flow control
+**            valve
 **--------------------------------------------------------------
 */
 {
@@ -2436,9 +2436,9 @@ void  fcvcoeff(int k, int n1, int n2)
    j = Row[n2];
 
    /*
-      If valve active, break network at valve and treat  
-      flow setting as external demand at upstream node   
-      and external supply at downstream node.            
+      If valve active, break network at valve and treat
+      flow setting as external demand at upstream node
+      and external supply at downstream node.
    */
    if (LinkStatus[k] == ACTIVE)
    {
@@ -2456,7 +2456,7 @@ void  fcvcoeff(int k, int n1, int n2)
    /*
      Otherwise treat valve as an open pipe
    */
-   else 
+   else
    {
       valvecoeff(k);  //pipecoeff(k);                                          //(2.00.11 - LR)
       Aij[Ndx[k]] -= P[k];
@@ -2472,10 +2472,10 @@ void  fcvcoeff(int k, int n1, int n2)
 void valvecoeff(int k)
 /*
 **--------------------------------------------------------------
-**   Input:   k    = link index                                   
-**   Output:  none                                                
+**   Input:   k    = link index
+**   Output:  none
 **   Purpose: computes solution matrix coeffs. for a completely
-**            open, closed, or throttled control valve.                                               
+**            open, closed, or throttled control valve.
 **--------------------------------------------------------------
 */
 {

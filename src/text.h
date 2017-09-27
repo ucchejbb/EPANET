@@ -1,16 +1,16 @@
 /*
 ****************************************************
 
-      String Constants for EPANET Program                            
-                                                                     
-VERSION:    2.00                                               
+      String Constants for EPANET Program
+
+VERSION:    2.00
 DATE:       5/8/00
             10/25/00
             8/15/07     (2.00.11)
             2/14/08    (2.00.12)
 AUTHOR:     L. Rossman
             US EPA - NRMRL
-                                                                     
+
 ****************************************************
 */
 /* ------------ Keyword Dictionary ---------- */
@@ -523,7 +523,7 @@ AUTHOR:     L. Rossman
 "WARNING: Maximum trials exceeded at %s hrs. System may be unstable."
 #define WARN03a "WARNING: Node %s disconnected at %s hrs"
 #define WARN03b "WARNING: %d additional nodes disconnected at %s hrs"
-#define WARN03c "WARNING: System disconnected because of Link %s" 
+#define WARN03c "WARNING: System disconnected because of Link %s"
 #define WARN04  "WARNING: Pump %s %s at %s hrs."
 #define WARN05  "WARNING: %s %s %s at %s hrs."
 #define WARN06  "WARNING: Negative pressures at %s hrs."
