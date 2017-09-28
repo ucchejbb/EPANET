@@ -1569,7 +1569,7 @@ double  avgqual(int k)
 //        printf("%f\n", msum/vsum); // JBB
    }
    if (vsum > 0.0 && Qtime > 0) return(msum/vsum); // removed && Qtime > 0 JBB
-   else {
+   else if (k<=Nlinks) { //JBB memory seg fault in linux
        return( (NodeQual[Link[k].N1] + NodeQual[Link[k].N2])/2. );
    }
 }
